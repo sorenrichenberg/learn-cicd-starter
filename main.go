@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/go-chi/chi"
@@ -95,7 +96,10 @@ func main() {
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 
-	// #nosec G706 - False positive: %q safely escapes log injection characters
-	log.Printf("Serving on port: %q\n", port)
+	sanitizedPort, err := strconv.Atoi(port)
+	if err != nil || sanitizedPort < 1 || sanitizedPort > 65535 {
+		log.Fatalf("invalid PORT: must be an integer between 1 and 65535")
+	}
+	log.Printf("Serving on port: %d\n", sanitizedPort)
 	log.Fatal(srv.ListenAndServe())
 }
