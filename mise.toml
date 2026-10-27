@@ -2,3 +2,4 @@
 gcloud = "latest"
 go = "1.27.1"
 python = "3.13"
+turso = "latest"
